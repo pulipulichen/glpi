@@ -889,6 +889,7 @@ $LANG['knowbase'][26]="查看";
 $LANG['knowbase'][27]="開"; 
 $LANG['knowbase'][29]="最近的文章"; 
 $LANG['knowbase'][30]="常問的問題"; 
+$LANG['knowbase'][31]="頂層類別"; 
 
 $LANG['ldap'][0]="由 LDAP目錄整批導入使用者"; 
 $LANG['ldap'][1]="使用者同步已完成導入"; 

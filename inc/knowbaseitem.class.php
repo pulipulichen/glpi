@@ -402,8 +402,7 @@ class KnowbaseItem extends CommonDBTM {
       $DB->query($query);
 
       $knowbaseitemcategories_id = $this->fields["knowbaseitemcategories_id"];
-      $fullcategoryname = getTreeValueCompleteName("glpi_knowbaseitemcategories",
-                                                   $knowbaseitemcategories_id);
+      $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id);
 
       if (!$inpopup) {
          $this->showTabs($options);
@@ -411,7 +410,7 @@ class KnowbaseItem extends CommonDBTM {
       $options['colspan'] = 2;
       $options['canedit'] = 0; // Hide the buttons
       $this->showFormHeader($options);
-
+      
       echo "<tr class='tab_bg_3'><th colspan='4'>".$LANG['common'][36]."&nbsp;:&nbsp;";
       echo "<a href='".$CFG_GLPI["root_doc"]."/front/".
             (isset($_SESSION['glpiactiveprofile'])
@@ -821,9 +820,33 @@ class KnowbaseItem extends CommonDBTM {
          echo "<table class='tab_cadrehov'>";
          echo "<tr><th>".$title."</th></tr>";
          while ($data=$DB->fetch_array($result)) {
+             $knowbaseitemcategories_id = $data["knowbaseitemcategories_id"];
+             $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id);
+             
+             $cate_link = "";
+             if ($fullcategoryname != "" && $fullcategoryname != "&nbsp;")
+             {
+                $cate_link = "<a href='".$CFG_GLPI["root_doc"]."/front/".
+                               (isset($_SESSION['glpiactiveprofile'])
+                                && $_SESSION['glpiactiveprofile']['interface']=="central"
+                                     ?"knowbaseitem.php"
+                                     :"helpdesk.faq.php")."?knowbaseitemcategories_id=$knowbaseitemcategories_id'>".
+                               $fullcategoryname."</a>";
+                $cate_link = "<br /><span class=\"knowbase\">(".$cate_link.")</span>";
+             }
+             
+             
             echo "<tr class='tab_bg_2'><td class='left'>";
             echo "<a ".($data['is_faq']?" class='pubfaq' ":" class='knowbase' ")." href=\"".
-                  $target."?id=".$data["id"]."\">".resume_text($data["question"],80)."</a></td></tr>";
+                  $target."?id=".$data["id"]."\">".resume_text($data["question"],80)."</a>"
+                    ." <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$data["id"]."&modify=yes' target=\"_blank\">"
+				                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
+				                        . "</a>".
+				      					" <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$data["id"]."#footer'>"
+				                        . "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/icones/rtf-dist.png' hspace='5' border='0'>"
+				                        . "</a>"
+                        .$cate_link
+                    ."</td></tr>";
          }
          echo "</table>";
       }

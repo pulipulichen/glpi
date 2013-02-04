@@ -859,7 +859,7 @@ li.auto_comp {
    border: dotted 2px #ccc;
 }
 
-a.knowbase {
+a.knowbase,span.knowbase {
    margin-left:8px;
 }
 

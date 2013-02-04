@@ -889,6 +889,7 @@ $LANG['knowbase'][26]="Views";
 $LANG['knowbase'][27]="On"; 
 $LANG['knowbase'][29]="Recent Entries"; 
 $LANG['knowbase'][30]="Most popular questions"; 
+$LANG['knowbase'][31]="Top Category"; 
 
 $LANG['ldap'][0]="Bulk import users from a LDAP directory"; 
 $LANG['ldap'][1]="Synchronizing already imported users"; 
