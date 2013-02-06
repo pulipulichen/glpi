@@ -109,6 +109,9 @@ small {
    position: relative;
 }
 
+.knowbaseitem-table-center-h .text {
+    font-size: 16pt;
+}
 
 .red { 
    color:red;
@@ -223,6 +226,11 @@ textarea, input {
    color: black;
    border: 1px solid #888888;
    font-size: 11px;
+}
+
+.knowbaseitem-table-center-h .input-text {
+    font-size: 12pt;
+    padding: 3px;
 }
 
 input {
@@ -1022,7 +1030,8 @@ div#tabcontent {
    margin-right: auto;
    background:url("../pics/login_glpi.png")  no-repeat;
    font-family : Verdana,Arial,Helvetica,sans-serif;
-   font-size : 12px;
+   /*font-size : 12px;*/
+   font-size : large;
    color :#659900;
    font-weight: bold;
 }
@@ -1097,6 +1106,10 @@ div#tabcontent {
 
 #boxlogin input {
    border: 1px solid #659900;
+}
+
+#boxlogin input.submit {
+   border-width: 3px;
 }
 
 #logo-login {

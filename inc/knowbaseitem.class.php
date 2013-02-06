@@ -494,14 +494,19 @@ class KnowbaseItem extends CommonDBTM {
          }
       }
 
-      echo "<div><table class='center-h'><tr><td>";
+      echo "<div><table class='center-h knowbaseitem-table-center-h'><tr><td>";
 
-      echo "<form method=get action='".$params["target"]."'><table border='0' class='tab_cadre'>";
+      echo "<form method='get' id='knowbase_search_form' action='".$params["target"]."'><table border='0' class='tab_cadre'>";
       echo "<tr><th colspan='2'>".$LANG['search'][0]."&nbsp;:</th></tr>";
       echo "<tr class='tab_bg_2 center'><td>";
-      echo "<input type='text' size='30' name='contains' value=\"".
-             stripslashes(cleanInputText($params["contains"]))."\"></td>";
-      echo "<td><input type='submit' value=\"".$LANG['buttons'][0]."\" class='submit'></td></tr>";
+      echo "<input type='text' size='60' class='text' id='knowbase_search_input' name='contains' value=\"".
+             stripslashes(cleanInputText($params["contains"]))."\" style='font-size:16pt;padding: 10px;'>"
+              ."<br />"
+              ."\n <label><input type='radio' name='search_type' onclick=\"var _form=document.getElementById('knowbase_search_form');_form.action='".$params["target"]."';document.getElementById('knowbase_search_input').name='contains';\" /> ".$LANG['search'][0].$LANG['pager'][5]."</label> "
+              ."\n <label><input type='radio' name='search_type' onclick=\"var _form=document.getElementById('knowbase_search_form');_form.action='/front/document.php';document.getElementById('knowbase_search_input').name='contains[0]'\" /> ".$LANG['search'][0].$LANG['Menu'][27]."</label> "
+              ."</td>";
+      echo "<td><input type='submit' value=\"".$LANG['buttons'][0]."\" class='submit'>"
+              ."</td></tr>";
       echo "</table>";
       if (isset($options['tickets_id'])) {
          echo "<input type='hidden' name='tickets_id' value='".$options['tickets_id']."'>";
