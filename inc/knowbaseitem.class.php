@@ -433,9 +433,17 @@ class KnowbaseItem extends CommonDBTM {
             $fullcategoryname."</a>";
       echo "</th></tr>";
 
-      echo "<tr class='tab_bg_3'><td class='left' colspan='4'><h2>".$LANG['knowbase'][14].": ";
+      echo "<tr class='tab_bg_3'><td class='left' colspan='4'>";
+      echo "<h1 class='question'>";  
+        //加上修改按鈕
+        echo " <a class=\"edit\" href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$this->fields['id']."&modify=yes' target=\"_blank\">"
+                                                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
+                                                        . $LANG['knowbase'][8]
+                                                        . "</a>";
+      
+      echo $LANG['knowbase'][14].": ";
       echo $this->fields["question"];
-      echo "</h2>";
+      echo "</h1>";
       
       echo "</td></tr>";
       echo "<tr class='tab_bg_3'><td class='left' colspan='4'><h2>".$LANG['knowbase'][15]."</h2>\n";

@@ -201,6 +201,13 @@ hr {
    margin-top:25px;
 }
 
+#page h1.question {
+    font-size: 2em !important;
+}
+
+#page h1.question .edit {
+    float: right;
+}
 
 /* ################--------------- form ---------------#################### */
 
