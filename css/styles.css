@@ -375,6 +375,7 @@ td { }
    -moz-box-shadow: 0px 2px 5px #666;
    -webkit-box-shadow: 0px 2px 5px #666;
    box-shadow: 0px 2px 5px #666;
+   margin-top: 1em; 
 }
 
 .tab_cadre_navigation {
@@ -879,10 +880,15 @@ li.auto_comp {
    border: dotted 2px #ccc;
 }
 
+/**
+ * 20120214 Pulipuli Chen
+ * 很窄了，不需要再添增邊距
+ */
+/*
 a.knowbase,span.knowbase {
    margin-left:8px;
 }
-
+*/
 a.pubfaq {
    margin-left:8px;
    color: #c9993C;

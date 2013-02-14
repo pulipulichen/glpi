@@ -348,26 +348,32 @@ class KnowbaseItem extends CommonDBTM {
       $isFAQ   = $this->fields["is_faq"];
       $editFAQ = haveRight("faq", "w");
 
-      echo "<table class='tab_cadre_fixe'><tr><th colspan='3'>";
-      if ($isFAQ) {
-         echo $LANG['knowbase'][10]."</th></tr>\n";
-      } else {
-         echo $LANG['knowbase'][11]."</th></tr>\n";
+      if ($edit == false) {
+        echo "<table class='tab_cadre_fixe'>"."<tr><th colspan='3'>";
+        if ($isFAQ) {
+           echo $LANG['knowbase'][10]."</th></tr>\n";
+        } else {
+           echo $LANG['knowbase'][11]."</th></tr>\n";
+        }
       }
-
-      if ($edit) {
+      else if ($edit) {
+         echo "<table class='tab_cadre_fixe'>";
          echo "<tr>";
          if ($editFAQ) {
             if ($isFAQ) {
                echo "<td class='center' width='33%'><a class='icon_nav_move' href=\"".
                      $CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=$ID&amp;removefromfaq=yes\">
                      <img src=\"".$CFG_GLPI["root_doc"]."/pics/faqremove.png\" alt=\"".
-                        $LANG['knowbase'][7]."\" title=\"".$LANG['knowbase'][7]."\"> ".$LANG['knowbase'][7]."</a></td>\n";
+                        $LANG['knowbase'][7]."\" title=\"".$LANG['knowbase'][7]."\"> ".$LANG['knowbase'][7]."</a>"
+                     . "<br />" . $LANG['knowbase'][10]
+                     ."</td>\n";
             } else {
                echo "<td class='center' width='33%'><a  class='icon_nav_move' href=\"".
                      $CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=$ID&amp;addtofaq=yes\">
                      <img src=\"".$CFG_GLPI["root_doc"]."/pics/faqadd.png\" alt=\"".
-                        $LANG['knowbase'][5]."\" title=\"".$LANG['knowbase'][5]."\"> ".$LANG['knowbase'][5]."</a></td>\n";
+                        $LANG['knowbase'][5]."\" title=\"".$LANG['knowbase'][5]."\"> ".$LANG['knowbase'][5]."</a>"
+                     . "<br />" . $LANG['knowbase'][11]
+                     ."</td>\n";
             }
          }
          echo "<td class='center' width='34%'><a class='icon_nav_move' href=\"".
@@ -415,7 +421,7 @@ class KnowbaseItem extends CommonDBTM {
       $DB->query($query);
 
       $knowbaseitemcategories_id = $this->fields["knowbaseitemcategories_id"];
-      $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id);
+      $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id, $LANG['knowbase'][31]);
 
       if (!$inpopup) {
          $this->showTabs($options);
@@ -434,6 +440,7 @@ class KnowbaseItem extends CommonDBTM {
       echo "</th></tr>";
 
       echo "<tr class='tab_bg_3'><td class='left' colspan='4'>";
+      echo "<h2>".$LANG['knowbase'][14]."</h2>";
       echo "<h1 class='question'>";  
         //加上修改按鈕
         echo " <a class=\"edit\" href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$this->fields['id']."&modify=yes' target=\"_blank\">"
@@ -441,7 +448,7 @@ class KnowbaseItem extends CommonDBTM {
                                                         . $LANG['knowbase'][8]
                                                         . "</a>";
       
-      echo $LANG['knowbase'][14].": ";
+      
       echo $this->fields["question"];
       echo "</h1>";
       
@@ -748,7 +755,7 @@ class KnowbaseItem extends CommonDBTM {
 				                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
 				                        . "</a>".
 				      					" <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$data["id"]."#footer'>"
-				                        . "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/icones/rtf-dist.png' hspace='5' border='0'>"
+				                        . "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/upload.png' hspace='5' border='0'>"
 				                        . "</a>".
                       					 "</div>
                                           <div class='kb_resume'>".
@@ -858,7 +865,7 @@ class KnowbaseItem extends CommonDBTM {
          echo "<tr><th>".$title."</th></tr>";
          while ($data=$DB->fetch_array($result)) {
              $knowbaseitemcategories_id = $data["knowbaseitemcategories_id"];
-             $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id);
+             $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id, $LANG['knowbase'][31]);
              
              $cate_link = "";
              if ($fullcategoryname != "" && $fullcategoryname != "&nbsp;")
@@ -869,7 +876,7 @@ class KnowbaseItem extends CommonDBTM {
                                      ?"knowbaseitem.php"
                                      :"helpdesk.faq.php")."?knowbaseitemcategories_id=$knowbaseitemcategories_id'>".
                                $fullcategoryname."</a>";
-                $cate_link = "<br /><span class=\"knowbase\">(".$cate_link.")</span>";
+                $cate_link = "<br /><span class=\"knowbase\">".$cate_link."</span>";
              }
              
              
@@ -880,7 +887,7 @@ class KnowbaseItem extends CommonDBTM {
 				                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
 				                        . "</a>".
 				      					" <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$data["id"]."#footer'>"
-				                        . "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/icones/rtf-dist.png' hspace='5' border='0'>"
+				                        . "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/upload.png' hspace='5' border='0'>"
 				                        . "</a>"
                         .$cate_link
                     ."</td></tr>";

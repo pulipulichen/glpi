@@ -425,11 +425,17 @@ function getTreeValueCompleteName($table, $ID, $withcomment=false) {
  * 取得知識庫的目錄名稱
  * @author Pudding Chen <pulipuli.chen@gmail.com>
  * @param int $knowbaseitemcategories_id
+ * @param string $top_cate_name 頂層類別的標題
  * @return string
  */
-function getKnowbaseitemcategoriesName($knowbaseitemcategories_id) {
+function getKnowbaseitemcategoriesName($knowbaseitemcategories_id, $top_cate_name = '') {
     
     $fullcategoryname = getTreeValueCompleteName("glpi_knowbaseitemcategories", $knowbaseitemcategories_id);
+    
+    if ($fullcategoryname == "&nbsp;")
+        $fullcategoryname = $top_cate_name;
+    
+    $fullcategoryname = "<img alt='' src='".$CFG_GLPI["root_doc"]."/pics/folder.png' hspace='5' border='0'> ".$fullcategoryname;
     
     return $fullcategoryname;
 }
