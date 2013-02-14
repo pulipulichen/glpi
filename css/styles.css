@@ -550,6 +550,9 @@ td { }
    font-size:10px;
    width:950px;
 }
+.center-h .tab_cadre_pager {
+    width: auto;
+}
 
 .tab_cadre_pager select, .tab_cadre_pager span, .tab_cadre_pager form {
    font-size:10px;
@@ -837,8 +840,10 @@ li.auto_comp {
 
 .kb_resume {
    text-align:left;
-   font-size: 9px;
-   line-height: 10px; 
+   /*font-size: 9px;
+   line-height: 10px; */
+   font-size: 0.8em;
+   line-height: 1.2em;
    clear: both;
    padding: 5px 0 10px 25px;
 }

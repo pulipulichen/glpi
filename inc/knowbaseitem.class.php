@@ -196,8 +196,21 @@ class KnowbaseItem extends CommonDBTM {
 
          if (isset($options['knowbaseitemcategories_id']) === false)
          {
-             Dropdown::show('KnowbaseItemCategory',
+             //Dropdown::show('KnowbaseItemCategory',
+             //               array('value' => $this->fields["knowbaseitemcategories_id"]));
+             /**
+              * 檢查是否有未分類這一個類別？
+              * 不要全部都丟在頂層類別！
+              */
+             $KbCategory = new KnowbaseItemCategory();
+             if ($KbCategory->getFromDB(KNOWBASE_MISC_CATEGORY)) {
+                Dropdown::show('KnowbaseItemCategory',
+                            array('value' => KNOWBASE_MISC_CATEGORY));
+             }
+             else {
+                 Dropdown::show('KnowbaseItemCategory',
                             array('value' => $this->fields["knowbaseitemcategories_id"]));
+             }
          }
          else
          {
@@ -420,9 +433,10 @@ class KnowbaseItem extends CommonDBTM {
             $fullcategoryname."</a>";
       echo "</th></tr>";
 
-      echo "<tr class='tab_bg_3'><td class='left' colspan='4'><h2>".$LANG['knowbase'][14]."</h2>";
+      echo "<tr class='tab_bg_3'><td class='left' colspan='4'><h2>".$LANG['knowbase'][14].": ";
       echo $this->fields["question"];
-
+      echo "</h2>";
+      
       echo "</td></tr>";
       echo "<tr class='tab_bg_3'><td class='left' colspan='4'><h2>".$LANG['knowbase'][15]."</h2>\n";
 
@@ -502,7 +516,7 @@ class KnowbaseItem extends CommonDBTM {
       echo "<input type='text' size='60' class='text' id='knowbase_search_input' name='contains' value=\"".
              stripslashes(cleanInputText($params["contains"]))."\" style='font-size:16pt;padding: 10px;'>"
               ."<br />"
-              ."\n <label><input type='radio' name='search_type' onclick=\"var _form=document.getElementById('knowbase_search_form');_form.action='".$params["target"]."';document.getElementById('knowbase_search_input').name='contains';\" /> ".$LANG['search'][0].$LANG['pager'][5]."</label> "
+              ."\n <label><input type='radio' name='search_type' onclick=\"var _form=document.getElementById('knowbase_search_form');_form.action='".$params["target"]."';document.getElementById('knowbase_search_input').name='contains';\" checked=\"true\" /> ".$LANG['search'][0].$LANG['pager'][5]."</label> "
               ."\n <label><input type='radio' name='search_type' onclick=\"var _form=document.getElementById('knowbase_search_form');_form.action='/front/document.php';document.getElementById('knowbase_search_input').name='contains[0]'\" /> ".$LANG['search'][0].$LANG['Menu'][27]."</label> "
               ."</td>";
       echo "<td><input type='submit' value=\"".$LANG['buttons'][0]."\" class='submit'>"
@@ -538,8 +552,9 @@ class KnowbaseItem extends CommonDBTM {
     *
     * @param $options : $_GET
     * @param $faq display on faq ?
+    * @param boolean $hide_cate_row hide category row?
    **/
-   static function showList($options, $faq=0) {
+   static function showList($options, $faq=0, $hide_cate_row = false) {
       global $DB, $LANG, $CFG_GLPI;
 
       // Default values of parameters
@@ -615,7 +630,7 @@ class KnowbaseItem extends CommonDBTM {
       } else { // no search -> browse by category
          $where .= " (`glpi_knowbaseitems`.`knowbaseitemcategories_id`
                         = '".$params["knowbaseitemcategories_id"]."')";
-         $order  = " ORDER BY `glpi_knowbaseitems`.`question` ASC";
+         $order  = " ORDER BY `glpi_knowbaseitems`.`date_mod` DESC , `glpi_knowbaseitems`.`question` ASC";
       }
 
       if (!$params["start"]) {
@@ -689,7 +704,9 @@ class KnowbaseItem extends CommonDBTM {
             if ($output_type!=HTML_OUTPUT) {
                echo Search::showHeaderItem($output_type, $LANG['knowbase'][15], $header_num);
             }
-            echo Search::showHeaderItem($output_type, $LANG['common'][36], $header_num);
+            
+            if ($hide_cate_row)
+                echo Search::showHeaderItem($output_type, $LANG['common'][36], $header_num);
 
             if (isset($options['tickets_id']) && $output_type==HTML_OUTPUT) {
                echo Search::showHeaderItem($output_type, '&nbsp;', $header_num);
@@ -738,7 +755,14 @@ class KnowbaseItem extends CommonDBTM {
                                                                                      "UTF-8"))),
                                         $item_num, $row_num);
                }
-               echo Search::showItem($output_type, $data["category"], $item_num, $row_num);
+               
+               if ($hide_cate_row) {
+                    echo Search::showItem($output_type
+                            , " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php?knowbaseitemcategories_id=".$data["category_id"]."' target=\"_blank\">"
+                                .$data["category"]
+                                ."</a>"
+                            , $item_num, $row_num);
+               }
 
                if (isset($options['tickets_id']) && $output_type==HTML_OUTPUT) {
                   $content = "<a href='".$CFG_GLPI['root_doc']."/front/ticket.form.php?load_kb_sol=".$data['id']
@@ -875,7 +899,24 @@ class KnowbaseItem extends CommonDBTM {
       echo "</td></tr>";
       echo "</table></div>";
 }
+   /**
+    * Print out lists of catagoris recent and popular kb/faq
+    *
+    * @param $options showList options
+    * @param $target where to go on action
+    * @param $faq display only faq
+    *
+    * @return nothing (display table)
+   **/
+   static function showViewTopCategory($options, $target, $faq=0) {
 
+      echo "<div><table class='center-h' width='950px'><tr><td class='center top' width='65%'>";
+      self::showList($options,$faq);
+      echo "</td><td class='center top' width='35%'>";
+      self::showRecentPopular($target, "recent", $faq);
+      echo "</td></tr>";
+      echo "</table></div>";
+}
 
    function getSearchOptions() {
       global $LANG;

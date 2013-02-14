@@ -65,21 +65,41 @@ $faq = !haveRight("knowbase","r");
 
 KnowbaseItem::searchForm($_GET, $faq);
 
-if (strlen($_GET["contains"]) != 0)
-    KnowbaseItem::showList($_GET,$faq);
+$cate_row_hide = true;
+if ($_GET["knowbaseitemcategories_id"] != 0 || strlen($_GET["contains"]) != 0) {
+    //不是頂層類別的情況下
+    if (strlen($_GET["contains"]) != 0)
+        KnowbaseItem::showList($_GET,$faq, $cate_row_hide);
 
-if (!isset($_GET["tickets_id"])) {
-   if (strlen($_GET["contains"]) == 0) {
-        KnowbaseItemCategory::showFirstLevel($_GET, $faq);
-   }
+    if (!isset($_GET["tickets_id"])) {
+       if (strlen($_GET["contains"]) == 0) {
+            KnowbaseItemCategory::showFirstLevel($_GET, $faq);
+       }
+    }
+
+    if (strlen($_GET["contains"]) == 0)
+        KnowbaseItem::showList($_GET,$faq);
+
+    if (!$_GET["knowbaseitemcategories_id"] && strlen($_GET["contains"])==0) {
+       KnowbaseItem::showViewGlobal($CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php", $faq) ;
+    }
+}
+else {
+    //是頂層類別的情況下
+    //KnowbaseItem::showList($_GET,$faq);
+
+    if (!$_GET["knowbaseitemcategories_id"] && strlen($_GET["contains"])==0) {
+       KnowbaseItem:: showViewTopCategory($_GET, $CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php", $faq) ;
+    }
+    
+    if (!isset($_GET["tickets_id"])) {
+       if (strlen($_GET["contains"]) == 0) {
+            KnowbaseItemCategory::showFirstLevel($_GET, $faq);
+       }
+    }
 }
 
-if (strlen($_GET["contains"]) == 0)
-    KnowbaseItem::showList($_GET,$faq);
 
-if (!$_GET["knowbaseitemcategories_id"] && strlen($_GET["contains"])==0) {
-   KnowbaseItem::showViewGlobal($CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php", $faq) ;
-}
 
 commonFooter();
 
