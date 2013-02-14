@@ -1362,6 +1362,19 @@ class Document extends CommonDBTM {
             $result = $DB->query($q);
             $nb = $DB->result($result,0,0);
 
+            /**
+             * 20130214 Pulipuli Chen
+             * 在這邊加入一行上傳文件的標題
+             */
+            echo "<tr class='tab_bg_1'><th class='center' colspan='3'>";
+            echo "<img alt=\"".$LANG['document'][16]."\" title=\"".$LANG['document'][16]."\" src='".$CFG_GLPI["root_doc"]."/pics/upload.png' hspace='5' border='0'> ";
+            echo $LANG['document'][16];
+            echo "</th>";
+            
+            echo "<th class='center' colspan='4'>";
+            echo $LANG['search'][0].$LANG['document'][18];
+            echo "</th></tr>";
+            
             echo "<tr class='tab_bg_1'><td class='center' colspan='3'>";
             echo "<input type='hidden' name='entities_id' value='$entity'>";
             echo "<input type='hidden' name='is_recursive' value='$is_recursive'>";

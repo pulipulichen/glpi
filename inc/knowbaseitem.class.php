@@ -428,17 +428,53 @@ class KnowbaseItem extends CommonDBTM {
       }
       $options['colspan'] = 2;
       $options['canedit'] = 0; // Hide the buttons
+      
       $this->showFormHeader($options);
       
-      echo "<tr class='tab_bg_3'><th colspan='4'>".$LANG['common'][36]."&nbsp;:&nbsp;";
-      echo "<a href='".$CFG_GLPI["root_doc"]."/front/".
-            (isset($_SESSION['glpiactiveprofile'])
-             && $_SESSION['glpiactiveprofile']['interface']=="central"
-                  ?"knowbaseitem.php"
-                  :"helpdesk.faq.php")."?knowbaseitemcategories_id=$knowbaseitemcategories_id'>".
-            $fullcategoryname."</a>";
-      echo "</th></tr>";
+      if (true) {
+         // 建立作者與修改日期
+        echo "<tr><th class='tdkb'  colspan='2'>";
+        if ($this->fields["users_id"]) {
+           echo $LANG['common'][37]."&nbsp;: ";
 
+           // Integer because true may be 2 and getUserName return array
+           if ($linkusers_id) {
+              $linkusers_id = 1;
+           } else {
+              $linkusers_id = 0;
+           }
+
+           echo getUserName($this->fields["users_id"], $linkusers_id);
+           echo "<br>";
+        }
+
+        if ($this->fields["date"]) {
+           echo $LANG['knowbase'][27]."&nbsp;: ". convDateTime($this->fields["date"]);
+        }
+
+        echo "</th>";
+        echo "<th class='tdkb' colspan='2'>";
+
+        if ($this->fields["date_mod"]) {
+           echo $LANG['common'][26]."&nbsp;: ".convDateTime($this->fields["date_mod"]).
+                "<br>";
+        }
+        echo $LANG['knowbase'][26]."&nbsp;: ".$this->fields["view"]."</th></tr>";
+      }
+
+              
+      if (true) {
+        //類別標題
+        echo "<tr class='tab_bg_3'><td colspan='4'>".$LANG['common'][36]."&nbsp;:&nbsp;";
+        echo "<a href='".$CFG_GLPI["root_doc"]."/front/".
+              (isset($_SESSION['glpiactiveprofile'])
+               && $_SESSION['glpiactiveprofile']['interface']=="central"
+                    ?"knowbaseitem.php"
+                    :"helpdesk.faq.php")."?knowbaseitemcategories_id=$knowbaseitemcategories_id'>".
+              $fullcategoryname."</a>";
+        echo "</td></tr>";
+      }
+      
       echo "<tr class='tab_bg_3'><td class='left' colspan='4'>";
       echo "<h2>".$LANG['knowbase'][14]."</h2>";
       echo "<h1 class='question'>";  
@@ -459,34 +495,6 @@ class KnowbaseItem extends CommonDBTM {
 
       echo "<div id='kbanswer'>".$answer."</div>";
       echo "</td></tr>";
-
-      echo "<tr><th class='tdkb'  colspan='2'>";
-      if ($this->fields["users_id"]) {
-         echo $LANG['common'][37]."&nbsp;: ";
-
-         // Integer because true may be 2 and getUserName return array
-         if ($linkusers_id) {
-            $linkusers_id = 1;
-         } else {
-            $linkusers_id = 0;
-         }
-
-         echo getUserName($this->fields["users_id"], $linkusers_id);
-         echo "<br>";
-      }
-
-      if ($this->fields["date"]) {
-         echo $LANG['knowbase'][27]."&nbsp;: ". convDateTime($this->fields["date"]);
-      }
-
-      echo "</th>";
-      echo "<th class='tdkb' colspan='2'>";
-
-      if ($this->fields["date_mod"]) {
-         echo $LANG['common'][26]."&nbsp;: ".convDateTime($this->fields["date_mod"]).
-              "<br>";
-      }
-      echo $LANG['knowbase'][26]."&nbsp;: ".$this->fields["view"]."</th></tr>";
 
       $this->showFormButtons($options);
       if (!$inpopup) {
