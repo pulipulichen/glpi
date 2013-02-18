@@ -1556,7 +1556,8 @@ div#show_all_menu {
    background: url("../pics/fd_footer.png") 0 0 repeat-x;
    font-size: 9px;	
    color :#757575;
-   padding: 6px;
+   padding: 13px;
+   padding-top: 0px;
    border: 2px solid #cccccc;
    position: relative;
    float: right;

@@ -173,6 +173,11 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
 
          // Display Category
          if ($params["knowbaseitemcategories_id"]!=0) {
+            /**
+             * 20130218 Pulipuli Chen
+             * 把這個功能模組化
+             */
+            /*
             $tmpID     = $params["knowbaseitemcategories_id"];
             $todisplay = "";
 
@@ -214,6 +219,8 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                $firstCata = false;
             }
             echo " > <a href=\"".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php\">".$LANG['Menu'][19]."</a> > ".$todisplay;
+            */
+            echo KnowbaseItemCategory::displayFullCategory($params["knowbaseitemcategories_id"], true);
          }
          else
              echo " > <a href=\"".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php\">".$LANG['Menu'][19]."</a>";
@@ -246,6 +253,51 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
       }
    }
 
+   static function displayFullCategory($knowbaseitemcategories_id, $enableOption = false) {
+      global $DB, $LANG, $CFG_GLPI;
+            
+            $tmpID     = $knowbaseitemcategories_id;
+            $todisplay = "";
+
+             $firstCata = true;
+            while ($tmpID!=0) {
+               $query2 = "SELECT *
+                          FROM `glpi_knowbaseitemcategories`
+                          WHERE `id` = '$tmpID'
+                                $faq_limit";
+               $result2 = $DB->query($query2);
+
+               if ($DB->numrows($result2)==1) {
+                  $data  = $DB->fetch_assoc($result2);
+                  $tmpID = $data["knowbaseitemcategories_id"];
+                  $todisplay = "<a href='".$params['target']."?knowbaseitemcategories_id=".
+                                 $data["id"]."'>".$data["name"]."</a>".(empty($todisplay)?"":" > ").
+                                 $todisplay;
+               } else {
+                  $tmpID = 0;
+               }
+
+               if ($firstCata && $enableOption)
+               {
+                    $todisplay = $todisplay
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\">"
+                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
+                        . "</a>";
+
+                    $todisplay = $todisplay
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=new&knowbaseitemcategories_id=".$data["id"]."'>"
+                        . "<img alt=\"".$LANG['buttons'][8]."\" title=\"".$LANG['buttons'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/menu_add.png' hspace='5' border='0'>"
+                        . "</a>";
+               }
+               if ($firstCata && $data["comment"] != "" && isset($data["comment"]) && $enableOption)
+               {
+                    
+                   $todisplay = $todisplay . "<br>" . nl2br($data["comment"]) . "";
+               }
+               $firstCata = false;
+            }
+            return " > <a href=\"".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php\">".$LANG['Menu'][19]."</a> > ".$todisplay;
+   }
 }
 
 ?>

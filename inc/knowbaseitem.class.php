@@ -420,9 +420,6 @@ class KnowbaseItem extends CommonDBTM {
                 WHERE `id` = '".$this->fields['id']."'";
       $DB->query($query);
 
-      $knowbaseitemcategories_id = $this->fields["knowbaseitemcategories_id"];
-      $fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id, $LANG['knowbase'][31]);
-
       if (!$inpopup) {
          $this->showTabs($options);
       }
@@ -462,16 +459,22 @@ class KnowbaseItem extends CommonDBTM {
         echo $LANG['knowbase'][26]."&nbsp;: ".$this->fields["view"]."</th></tr>";
       }
 
+      $knowbaseitemcategories_id = $this->fields["knowbaseitemcategories_id"];
+      //$fullcategoryname = getKnowbaseitemcategoriesName($knowbaseitemcategories_id, $LANG['knowbase'][31]);
+      
+      $fullcategorylink = KnowbaseItemCategory::displayFullCategory($knowbaseitemcategories_id, false);
               
       if (true) {
         //類別標題
         echo "<tr class='tab_bg_3'><td colspan='4'>".$LANG['common'][36]."&nbsp;:&nbsp;";
-        echo "<a href='".$CFG_GLPI["root_doc"]."/front/".
+        /*echo "<a href='".$CFG_GLPI["root_doc"]."/front/".
               (isset($_SESSION['glpiactiveprofile'])
                && $_SESSION['glpiactiveprofile']['interface']=="central"
                     ?"knowbaseitem.php"
                     :"helpdesk.faq.php")."?knowbaseitemcategories_id=$knowbaseitemcategories_id'>".
               $fullcategoryname."</a>";
+         */
+        echo $fullcategorylink;
         echo "</td></tr>";
       }
       
@@ -480,7 +483,7 @@ class KnowbaseItem extends CommonDBTM {
       echo "<h1 class='question'>";  
         //加上修改按鈕
         echo " <a class=\"edit\" href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$this->fields['id']."&modify=yes' target=\"_blank\">"
-                                                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
+                                                        . " <img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'> "
                                                         . $LANG['knowbase'][8]
                                                         . "</a>";
       
@@ -683,6 +686,10 @@ class KnowbaseItem extends CommonDBTM {
          initNavigateListItems('KnowbaseItem', $title);
 
          $numrows    = $DB->numrows($result);
+         
+         if ($numrows == 0)
+             echo "<div class='center b'>".$LANG['search'][15]."</div>";
+         
          $list_limit = $_SESSION['glpilist_limit'];
 
          // Limit the result, if no limit applies, use prior result
