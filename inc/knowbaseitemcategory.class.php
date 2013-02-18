@@ -227,6 +227,9 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
 
          if ($DB->numrows($result)>0) {
             $i = 0;
+            
+            $len_limit = 20;
+            
             while ($row=$DB->fetch_array($result)) {
                // on affiche les résultats sur trois colonnes
                if ($i%3==0) {
@@ -240,7 +243,30 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                echo " <a href='".$CFG_GLPI["root_doc"]."knowbaseitemcategory.form.php?id=".$row["id"]."'  target=\"_blank\"><img alt=\"".$LANG['knowbase'][8].
                "\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'></a>";
 //               echo "<div class='kb_resume'>".resume_text($row['comment'],60)."</div>";
-               echo "<div class='kb_resume'>".nl2br($row['comment'])."</div>";
+               
+                if ($row['comment'] != '') {
+                    echo "<div class='kb_resume'>".nl2br($row['comment'])."</div>";
+                }
+                else {
+                    //查詢子類別
+                    $sub_cates = KnowbaseItemCategory::getSubCategories($ID);
+                    
+                    //將子類別組成敘述
+                    $comment = '';
+                    foreach ($sub_cates as $cate) {
+                        if ($comment != '')
+                            $comment = $comment . ', ';
+                        $comment = $comment . "<a href='".$params['target']."?knowbaseitemcategories_id=".$cate["id"]."'>".$cate["name"]."</a>";
+                        
+                        if (utf8_strlen(strip_tags($comment)) > $len_limit) {
+                            break;
+                        }
+                    }
+                    
+                    //輸出
+                    echo "<div class='kb_resume'>".$comment."</div>"; 
+                     
+                }
 
 
                if ($i%3==2) {
@@ -253,6 +279,17 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
       }
    }
 
+   /**
+    * 展示類別完整路徑，每一層都有連結
+    * 
+    * @author Pulipuli Chen <pulipuli.chen@gmail.com> 20130218
+    * @global type $DB
+    * @global type $LANG
+    * @global type $CFG_GLPI
+    * @param {int} $knowbaseitemcategories_id
+    * @param {boolean} $enableOption
+    * @return String
+    */
    static function displayFullCategory($knowbaseitemcategories_id, $enableOption = false) {
       global $DB, $LANG, $CFG_GLPI;
             
@@ -280,23 +317,69 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                if ($firstCata && $enableOption)
                {
                     $todisplay = $todisplay
-                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\">"
-                        . "<img alt=\"".$LANG['knowbase'][8]."\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'>"
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\" class='option'>"
+                        . "<img alt=\"".$LANG['knowbase'][33]."\" title=\"".$LANG['knowbase'][33]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'> "
+                        . $LANG['knowbase'][33]
+                        . "</a>";
+                    
+                    $todisplay = $todisplay
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\" class='option'>"
+                        . "<img alt=\"".$LANG['knowbase'][34]."\" title=\"".$LANG['knowbase'][34]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqdelete.png' hspace='5' border='0'> "
+                        . $LANG['knowbase'][34]
                         . "</a>";
 
                     $todisplay = $todisplay
-                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=new&knowbaseitemcategories_id=".$data["id"]."'>"
-                        . "<img alt=\"".$LANG['buttons'][8]."\" title=\"".$LANG['buttons'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/menu_add.png' hspace='5' border='0'>"
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=new&knowbaseitemcategories_id=".$data["id"]."' class='option'>"
+                        . "<img alt=\"".$LANG['knowbase'][35]."\" title=\"".$LANG['knowbase'][35]."\" src='".$CFG_GLPI["root_doc"]."/pics/menu_add.png' hspace='5' border='0'> "
+                        . $LANG['knowbase'][35]
                         . "</a>";
-               }
-               if ($firstCata && $data["comment"] != "" && isset($data["comment"]) && $enableOption)
-               {
                     
-                   $todisplay = $todisplay . "<br>" . nl2br($data["comment"]) . "";
+                    $todisplay = $todisplay
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?popup=1&id=".$data["id"]."' class='option'>"
+                        . "<img alt=\"".$LANG['knowbase'][36]."\" title=\"".$LANG['knowbase'][36]."\" src='".$CFG_GLPI["root_doc"]."/pics/folder.png' hspace='5' border='0'> "
+                        . $LANG['knowbase'][36]
+                        . "</a>";
+                    
+               }
+               if ($firstCata&& isset($data["comment"]) && $enableOption)
+               {
+                   if ($data["comment"] != "" ) {
+                       $todisplay = $todisplay . "<br>" . nl2br($data["comment"]) . "";
+                   }
                }
                $firstCata = false;
             }
             return " > <a href=\"".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php\">".$LANG['Menu'][19]."</a> > ".$todisplay;
+   }
+   
+   static function getSubCategories($knowbaseitemcategories_id, $faq_limit = '') {
+       global $DB, $LANG, $CFG_GLPI;
+       
+       $sub_cates = Array();
+       
+       $query = $query = "SELECT *
+                   FROM `glpi_knowbaseitemcategories`
+                   WHERE `glpi_knowbaseitemcategories`.`knowbaseitemcategories_id`
+                              = '".$knowbaseitemcategories_id."'
+                         $faq_limit
+                   ORDER BY `name` ASC";
+       
+       $result=$DB->query($query);
+       
+       if ($DB->numrows($result)>0) {
+            
+            while ($row=$DB->fetch_array($result)) {
+               $ID = $row["id"];
+               
+               $sub_cates[] = Array(
+                   'id' => $ID,
+                   'name' => $row["name"],
+                   'comment' => $row['comment']
+               );
+            }
+         }
+       
+       return $sub_cates;
    }
 }
 

@@ -877,11 +877,10 @@ $LANG['knowbase'][1]="常見問題解答";
 $LANG['knowbase'][5]="將此項目放入常見問題解答"; 
 $LANG['knowbase'][6]="為項目選項一個類別："; 
 $LANG['knowbase'][7]="從常見問答刪除這個項目"; 
-$LANG['knowbase'][8]="編輯這個項目"; 
-$LANG['knowbase'][9]="刪除這個項目"; 
+$LANG['knowbase'][8]="編輯項目"; 
+$LANG['knowbase'][9]="刪除項目"; 
 //$LANG['knowbase'][10]="這項目是公眾常見問答的一部分"; 
 $LANG['knowbase'][10]="這份項目文章被設定為常見問答"; 
-//
 $LANG['knowbase'][11]="這份項目文章並不是設定為常見問答"; 
 $LANG['knowbase'][13]="類別名稱"; 
 $LANG['knowbase'][14]="標題"; 
@@ -893,6 +892,11 @@ $LANG['knowbase'][29]="最近的文章";
 $LANG['knowbase'][30]="常問的問題"; 
 $LANG['knowbase'][31]="頂層類別"; 
 $LANG['knowbase'][32]="文章"; 
+$LANG['knowbase'][33]="編輯類別"; 
+$LANG['knowbase'][34]="刪除類別"; 
+$LANG['knowbase'][35]="新增項目文章"; 
+$LANG['knowbase'][36]="新增子類別"; 
+//
 
 $LANG['ldap'][0]="由 LDAP目錄整批導入使用者"; 
 $LANG['ldap'][1]="使用者同步已完成導入"; 

@@ -383,6 +383,10 @@ td { }
    margin-top: 1em; 
 }
 
+.tab_cadre_central a.option {
+    font-weight: normal;
+}
+
 .tab_cadre_navigation {
    margin: 0 auto;
    padding: 4px;
@@ -868,6 +872,10 @@ li.auto_comp {
    clear: both;
    /*padding: 5px 0 10px 25px;*/
    padding: 5px 0 10px 0px;
+}
+
+.kb_resume a:link {
+    font-weight: normal;
 }
 
 .tdkb {

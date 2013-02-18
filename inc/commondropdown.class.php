@@ -186,7 +186,7 @@ abstract class CommonDropdown extends CommonDBTM {
       echo "</textarea></td></tr>\n";
       
       foreach ($fields as $field) {
-         echo "<tr class='tab_bg_1'><td>".$field['label']."&nbsp;:</td><td>";
+         echo "<tr class='tab_bg_1'><td>".$field['label']."&nbsp;:".$field['type']."</td><td>";
          switch ($field['type']) {
             case 'UserDropdown' :
                User::dropdown(array('name'   => $field['name'],
