@@ -167,8 +167,8 @@ abstract class CommonDropdown extends CommonDBTM {
       $fields = $this->getAdditionalFields();
       $nb = count($fields);
 
-      echo "<tr class='tab_bg_1'><td>".$LANG['common'][16]."&nbsp;:</td>";
-      echo "<td>";
+      echo "<tr class='tab_bg_1'><td valign='top'>".$LANG['common'][16]."&nbsp;:</td>";
+      echo "<td valign='top'>";
       echo "<input type='hidden' name='itemtype' value='".$this->getType()."'>";
       if ($this instanceof CommonDevice) {
          // Awfull hack for CommonDevice where name is designation
@@ -176,14 +176,15 @@ abstract class CommonDropdown extends CommonDBTM {
       } else {
          autocompletionTextField($this, "name");
       }
+      
       echo "</td>";
 
-      echo "<td rowspan='".($nb+1)."'>";
+      echo "<td rowspan='".($nb+1)."' valign='top'>";
       echo $LANG['common'][25]."&nbsp;:</td>";
       echo "<td rowspan='".($nb+1)."'>
-            <textarea cols='45' rows='".($nb+2)."' name='comment' >".$this->fields["comment"];
+            <textarea cols='45' rows='".($nb+2)."' name='comment' class='comment' >".$this->fields["comment"];
       echo "</textarea></td></tr>\n";
-
+      
       foreach ($fields as $field) {
          echo "<tr class='tab_bg_1'><td>".$field['label']."&nbsp;:</td><td>";
          switch ($field['type']) {

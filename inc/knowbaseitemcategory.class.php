@@ -270,7 +270,7 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                if ($DB->numrows($result2)==1) {
                   $data  = $DB->fetch_assoc($result2);
                   $tmpID = $data["knowbaseitemcategories_id"];
-                  $todisplay = "<a href='".$params['target']."?knowbaseitemcategories_id=".
+                  $todisplay = "<a href='/front/knowbaseitem.php?knowbaseitemcategories_id=".
                                  $data["id"]."'>".$data["name"]."</a>".(empty($todisplay)?"":" > ").
                                  $todisplay;
                } else {

@@ -1827,6 +1827,14 @@ class CommonDBTM extends CommonGLPI {
          } else {
             echo "&nbsp;";
          }
+         
+         if ($params["target"] == "/front/knowbaseitemcategory.form.php")
+         {
+             //echo $this->fields["template_name"];
+             //print_r($params);
+             //echo $ID;
+             echo KnowbaseItemCategory::displayFullCategory($ID);
+         }
       }
       echo "</th></tr>\n";
    }

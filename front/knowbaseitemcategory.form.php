@@ -33,10 +33,10 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 
-
 define('GLPI_ROOT', '..');
 include (GLPI_ROOT . "/inc/includes.php");
 
 $dropdown = new KnowbaseItemCategory();
 include (GLPI_ROOT . "/front/dropdown.common.form.php");
+
 ?>
