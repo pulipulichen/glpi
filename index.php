@@ -35,6 +35,7 @@
 
 // If config_db doesn't exist -> start installation
 define('GLPI_ROOT', '.');
+
 include (GLPI_ROOT . "/config/based_config.php");
 
 if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
@@ -44,6 +45,7 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
 
 } else {
    $TRY_OLD_CONFIG_FIRST = true;
+   
 
    include (GLPI_ROOT . "/inc/includes.php");
    $_SESSION["glpicookietest"] = 'testcookie';
@@ -52,6 +54,8 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
    if (isset($_GET["noCAS"])) {
       $_GET["noAUTO"] = $_GET["noCAS"];
    }
+   
+   include (GLPI_CONFIG_DIR . "/define.php");
 
    Auth::checkAlternateAuthSystems(true, isset($_GET["redirect"])?$_GET["redirect"]:"");
    

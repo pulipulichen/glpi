@@ -311,6 +311,11 @@ $CFG_GLPI['user_pref_field'] = array('csv_delimiter', 'date_format', 'default_re
                                      'priority_3', 'priority_4', 'priority_5', 'priority_6',
                                      'show_jobs_at_login', 'task_private','use_flat_dropdowntree');
 
+// Use for index
+$CFG_GLPI['text_login'] = '這裡是<a href="http://dlll.nccu.edu.tw" target="_blank">數位圖書館與數位學習實驗室DLLL</a>的知識庫
+    
+關於登入與使用的問題，請來信詢問<a href="mailto:pulipuli.chen@gmail.com">布丁</a>';
+
 
 // Category of knowbase whick are misc
 define("KNOWBASE_MISC_CATEGORY",135);
