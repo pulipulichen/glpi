@@ -320,7 +320,8 @@ class Document extends CommonDBTM {
       if ($ID>0) {
          echo "<tr class='tab_bg_1'>";
          echo "<td>".$LANG['document'][22]."&nbsp;:</td>";
-         echo "<td>".$this->getDownloadLink('',45);
+         
+         echo "<td>".$this->getDownloadLink('', 45);
          echo "<input type='hidden' name='current_filepath' value='".$this->fields["filepath"]."'>";
          echo "<input type='hidden' name='current_filename' value='".$this->fields["filename"]."'>";
          echo "</td></tr>";
@@ -407,7 +408,7 @@ class Document extends CommonDBTM {
     * @param $len maximum length of displayed string
     *
    **/
-   function getDownloadLink($params='', $len=20) {
+   function getDownloadLink($params='', $len=-1) {
       global $DB,$CFG_GLPI;
 
       $splitter = explode("/",$this->fields['filename']);
@@ -420,7 +421,7 @@ class Document extends CommonDBTM {
          $fileout = $this->fields['filename'];
       }
 
-      if (utf8_strlen($fileout)>$len) {
+      if (utf8_strlen($fileout)>$len && $len != -1) {
          $fileout = utf8_substr($fileout,0,$len)."&hellip;";
       }
 
@@ -1264,7 +1265,8 @@ class Document extends CommonDBTM {
       }
 
       echo "</th></tr>";
-      echo "<tr><th>".$LANG['common'][16]."</th>";
+      echo "<tr>";
+      echo "<th>".$LANG['common'][16]."</th>";
       echo "<th>".$LANG['entity'][0]."</th>";
       echo "<th>".$LANG['document'][2]."</th>";
       echo "<th>".$LANG['document'][33]."</th>";
@@ -1291,7 +1293,12 @@ class Document extends CommonDBTM {
             $downloadlink = NOT_AVAILABLE;
 
             if ($document->getFromDB($docID)) {
-               $link         = $document->getLink();
+               $link         = $document->getLink(0, 5);
+               
+                /**
+                 * 20130218 Pulipuli Chen
+                 * 不限制檔案字數
+                 */
                $downloadlink = $document->getDownloadLink($linkparam);
             }
 
@@ -1302,7 +1309,9 @@ class Document extends CommonDBTM {
             $assocID      = $data["assocID"];
 
             echo "<tr class='tab_bg_1".($data["is_deleted"]?"_2":"")."'>";
-            echo "<td class='center'>$link</td>";
+            
+            echo "<td class='center'>".$link."</td>";
+            
             echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities",$data['entity']);
             echo "</td>";
             echo "<td class='center'>$downloadlink</td>";

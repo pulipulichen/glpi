@@ -899,6 +899,9 @@ a.pubfaq {
    /*margin-left:8px;*/
    color: #c9993C;
 }
+.knowbase a {
+    font-weight: normal;
+}
 
 a.pubfaq:hover {
    color: black;

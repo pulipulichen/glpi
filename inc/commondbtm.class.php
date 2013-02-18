@@ -713,7 +713,7 @@ class CommonDBTM extends CommonGLPI {
     *
     * @return string : HTML link
    **/
-   function getLink($with_comment=0) {
+   function getLink($with_comment=0, $len = 20) {
       global $CFG_GLPI;
 
       if (!isset($this->fields['id'])) {
@@ -734,7 +734,13 @@ class CommonDBTM extends CommonGLPI {
          $link .= (strpos($link,'?') ? '&amp;':'?').'id=' . $this->fields['id'];
          $link .= ($this->isTemplate() ? "&amp;withtemplate=1" : "");
 
-         return "<a href='$link'>".$this->getNameID($with_comment)."</a>";
+         $nameID = $this->getNameID($with_comment);
+         
+         if (utf8_strlen($nameID)>$len && $len != -1) {
+            $nameID = utf8_substr($nameID,0,$len)."&hellip;";
+         }
+         
+         return "<a href='$link'>".$nameID."</a>";
       }
 
    }
