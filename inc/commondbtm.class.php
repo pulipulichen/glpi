@@ -1947,7 +1947,8 @@ class CommonDBTM extends CommonGLPI {
       if (!$this->isNewID($ID) && !$this->getFromDB($ID)) {
          // Gestion timeout session
          if (!getLoginUserID()) {
-            glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+            //glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+            getRedirectIndex();
             exit ();
          }
          displayNotFoundError();
@@ -1956,7 +1957,8 @@ class CommonDBTM extends CommonGLPI {
          if (!$this->can($ID,$right,$input)) {
             // Gestion timeout session
             if (!getLoginUserID()) {
-               glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+               //glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+               getRedirectIndex();
                exit ();
             }
             displayRightError();
@@ -1978,7 +1980,8 @@ class CommonDBTM extends CommonGLPI {
       if (!$this->canGlobal($right)) {
          // Gestion timeout session
          if (!getLoginUserID()) {
-            glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+            //glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+             getRedirectIndex();
             exit ();
          }
          displayRightError();

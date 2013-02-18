@@ -317,15 +317,9 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                if ($firstCata && $enableOption)
                {
                     $todisplay = $todisplay
-                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\" class='option'>"
+                        . "<br /> <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\" class='option'>"
                         . "<img alt=\"".$LANG['knowbase'][33]."\" title=\"".$LANG['knowbase'][33]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'> "
                         . $LANG['knowbase'][33]
-                        . "</a>";
-                    
-                    $todisplay = $todisplay
-                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?id=".$data["id"]."' target=\"_blank\" class='option'>"
-                        . "<img alt=\"".$LANG['knowbase'][34]."\" title=\"".$LANG['knowbase'][34]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqdelete.png' hspace='5' border='0'> "
-                        . $LANG['knowbase'][34]
                         . "</a>";
 
                     $todisplay = $todisplay
@@ -335,7 +329,7 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                         . "</a>";
                     
                     $todisplay = $todisplay
-                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?popup=1&id=".$data["id"]."' class='option'>"
+                        . " <a href='".$CFG_GLPI["root_doc"]."/front/knowbaseitemcategory.form.php?popup=1&parent_id=".$data["id"]."' class='option'>"
                         . "<img alt=\"".$LANG['knowbase'][36]."\" title=\"".$LANG['knowbase'][36]."\" src='".$CFG_GLPI["root_doc"]."/pics/folder.png' hspace='5' border='0'> "
                         . $LANG['knowbase'][36]
                         . "</a>";
@@ -351,6 +345,7 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
             }
             return " > <a href=\"".$CFG_GLPI["root_doc"]."/front/knowbaseitem.php\">".$LANG['Menu'][19]."</a> > ".$todisplay;
    }
+   
    
    static function getSubCategories($knowbaseitemcategories_id, $faq_limit = '') {
        global $DB, $LANG, $CFG_GLPI;
@@ -380,6 +375,23 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
          }
        
        return $sub_cates;
+   }
+   
+   static function getCategoryName($knowbaseitemcategories_id, $faq_limit = '') {
+        global $DB, $LANG, $CFG_GLPI;
+        $query = "SELECT  DISTINCT `glpi_knowbaseitemcategories`.`name`
+                   FROM `glpi_knowbaseitemcategories`
+                   WHERE `id` = '".$knowbaseitemcategories_id."'
+                         $faq_limit
+                   ORDER BY `name` ASC";
+        $result=$DB->query($query);
+        if ($DB->numrows($result)>0) {
+            $row=$DB->fetch_array($result);
+            return $row['name'];
+        }
+        else {
+            return false;
+        }
    }
 }
 

@@ -43,7 +43,16 @@ if (isset($_GET["id"])) {
    glpi_header($CFG_GLPI["root_doc"]."/front/knowbaseitem.form.php?id=".$_GET["id"]);
 }
 
-commonHeader($LANG['title'][5],$_SERVER['PHP_SELF'],"utils","knowbase");
+//commonHeader($LANG['title'][5],$_SERVER['PHP_SELF'],"utils","knowbase");
+
+$title = $LANG['title'][5];
+if (strlen($_GET["contains"]) != 0) {
+    $title = $LANG['search'][0] . ": " . $_GET["contains"];
+}
+else if ($_GET["knowbaseitemcategories_id"] != 0) {
+    $title = KnowbaseItemCategory::getCategoryName($_GET["knowbaseitemcategories_id"]);
+}
+commonHeader($title,$_SERVER['PHP_SELF'],"utils","knowbase");
 
 // Search a solution
 if (!isset($_GET["contains"]) && isset($_GET["tickets_id"])) {

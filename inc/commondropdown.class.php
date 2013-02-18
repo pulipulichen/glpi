@@ -185,8 +185,15 @@ abstract class CommonDropdown extends CommonDBTM {
             <textarea cols='45' rows='".($nb+2)."' name='comment' class='comment' >".$this->fields["comment"];
       echo "</textarea></td></tr>\n";
       
+      if (isset($_GET['parent_id']))
+      {
+          $fields[0]['type'] = 'parent_id';
+          $parent_id = $_GET['parent_id'];
+      }
+      //echo isset($_GET['parent_id']);
+      //print_r($fields);
       foreach ($fields as $field) {
-         echo "<tr class='tab_bg_1'><td>".$field['label']."&nbsp;:".$field['type']."</td><td>";
+         echo "<tr class='tab_bg_1'><td>".$field['label']."&nbsp;:</td><td>";
          switch ($field['type']) {
             case 'UserDropdown' :
                User::dropdown(array('name'   => $field['name'],
@@ -224,6 +231,11 @@ abstract class CommonDropdown extends CommonDBTM {
                                     'entity' => $restrict,
                                     'used'   => ($ID>0 ? getSonsOf($this->getTable(), $ID)
                                                        : array())));
+               //print_r( getSonsOf($this->getTable(), $ID));
+               break;
+            case 'parent_id' :
+               echo "<input type='hidden' name='knowbaseitemcategories_id' value='$parent_id' />";
+               echo KnowbaseItemCategory::getCategoryName($parent_id);
                break;
 
             case 'icon' :

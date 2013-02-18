@@ -63,6 +63,10 @@ function getLoginUserID($force_human=true) {
    return false;
 }
 
+function getRedirectIndex() {
+    global $CFG_GLPI;
+    return glpi_header($CFG_GLPI["root_doc"] . "/index.php?redirect=".$_SERVER["REQUEST_URI"]);
+}
 
 /**
  * Have I the right $right to module $module (conpare to session variable)
@@ -147,7 +151,8 @@ function checkRight($module, $right) {
    if (!haveRight($module, $right)) {
       // Gestion timeout session
       if (!getLoginUserID()) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+         //glpi_header($CFG_GLPI["root_doc"] . "/index.php?redirect=".$_SERVER["REQUEST_URI"]);
+         getRedirectIndex();
          exit ();
       }
       displayRightError();
@@ -185,7 +190,8 @@ function checkSeveralRightsOr($modules) {
    if (!$valid) {
       // Gestion timeout session
       if (!getLoginUserID()) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+         //glpi_header($CFG_GLPI["root_doc"] . "/index.php?redirect=".$_SERVER["REQUEST_URI"]);
+          getRedirectIndex();
          exit ();
       }
       displayRightError();
@@ -205,7 +211,8 @@ function checkCentralAccess() {
        || $_SESSION["glpiactiveprofile"]["interface"] != "central") {
       // Gestion timeout session
       if (!getLoginUserID()) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+         //glpi_header($CFG_GLPI["root_doc"] . "/index.php?redirect=".$_SERVER["REQUEST_URI"]);
+          getRedirectIndex();
          exit ();
       }
       displayRightError();
@@ -225,7 +232,8 @@ function checkHelpdeskAccess() {
        || $_SESSION["glpiactiveprofile"]["interface"] != "helpdesk") {
       // Gestion timeout session
       if (!getLoginUserID()) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+         //glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+          getRedirectIndex();
          exit ();
       }
       displayRightError();
@@ -244,7 +252,8 @@ function checkLoginUser() {
    if (!isset ($_SESSION["glpiname"])) {
       // Gestion timeout session
       if (!getLoginUserID()) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+         //glpi_header($CFG_GLPI["root_doc"] . "/index.php");
+          getRedirectIndex();
          exit ();
       }
       displayRightError();

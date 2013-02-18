@@ -80,7 +80,13 @@ if ($auth->Login($_POST['login_name'], $_POST['login_password'],
       glpi_header($CFG_GLPI['root_doc'] . "/front/helpdesk.public.php$REDIRECT");
    } else {
       //glpi_header($CFG_GLPI['root_doc'] . "/front/central.php$REDIRECT");
-      glpi_header($CFG_GLPI['root_doc'] . "/front/knowbaseitem.php$REDIRECT");
+       
+      if ($_POST['redirect'] == '' || !isset($_POST['redirect'])) {
+          glpi_header($CFG_GLPI['root_doc'] . "/front/knowbaseitem.php$REDIRECT");
+      }
+      else {
+          glpi_header($CFG_GLPI['root_doc'] . $_POST['redirect']);
+      }
    }
 
 } else {

@@ -54,7 +54,7 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
    }
 
    Auth::checkAlternateAuthSystems(true, isset($_GET["redirect"])?$_GET["redirect"]:"");
-
+   
    // Send UTF8 Headers
    header("Content-Type: text/html; charset=UTF-8");
 
@@ -82,6 +82,7 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
    echo "</head>";
 
    echo "<body>";
+   
    echo "<div id='contenulogin'>";
    echo "<div id='logo-login'>";
    echo nl2br(unclean_cross_side_scripting_deep($CFG_GLPI['text_login']));

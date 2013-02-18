@@ -62,6 +62,7 @@ if (isset($_POST["add"])) {
                     $_SESSION["glpiname"]." added ".$_POST["name"].".");
       }
    }
+   
    glpi_header($_SERVER['HTTP_REFERER']);
 
 } else if (isset($_POST["delete"])) {
@@ -111,7 +112,15 @@ if (isset($_POST["add"])) {
    if (isset($_GET["rand"])) {
       $_SESSION["glpipopup"]["rand"]=$_GET["rand"];
    }
-   $dropdown->showForm($_GET["id"]);
+   
+   if (!isset($options)) {
+      $options = array();
+   }
+   if (isset($_GET["parent_id"])) {
+       $options['parent_id'] = $_GET["parent_id"];
+   }
+   
+   $dropdown->showForm($_GET["id"], $options);
    echo "<div class='center'><br><a href='javascript:window.close()'>".$LANG['buttons'][13]."</a>";
    echo "</div>";
    popFooter();
