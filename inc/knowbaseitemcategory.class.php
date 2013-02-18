@@ -228,7 +228,7 @@ class KnowbaseItemCategory extends CommonTreeDropdown {
                $ID = $row["id"];
                echo "<td class='tdkb_result'>";
                echo "<a href='".$params['target']."?knowbaseitemcategories_id=".$row["id"]."'><img alt='' src='".$CFG_GLPI["root_doc"]."/pics/folder.png' hspace='5' border='0'></a>";
-               echo "<strong><a href='".$params['target']."?knowbaseitemcategories_id=".$row["id"]."'>".
+               echo "<strong><a href='".$params['target']."?knowbaseitemcategories_id=".$row["id"]."' class='knowbase-item-categories'>".
                               $row["name"]."</a></strong>";
                echo " <a href='".$CFG_GLPI["root_doc"]."knowbaseitemcategory.form.php?id=".$row["id"]."'  target=\"_blank\"><img alt=\"".$LANG['knowbase'][8].
                "\" title=\"".$LANG['knowbase'][8]."\" src='".$CFG_GLPI["root_doc"]."/pics/faqedit.png' hspace='5' border='0'></a>";

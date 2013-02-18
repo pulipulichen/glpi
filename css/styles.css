@@ -142,6 +142,11 @@ a, a:link {
    font-size : 11px;
 }
 
+.kb a, .kb a:link, a.pubfaq:link
+, a.knowbase-item-categories:link, a.knowbase:link {
+    font-size: 1.3em;
+}
+
 a:hover {
    color: black;
 }
@@ -853,7 +858,8 @@ li.auto_comp {
    font-size: 0.8em;
    line-height: 1.2em;
    clear: both;
-   padding: 5px 0 10px 25px;
+   /*padding: 5px 0 10px 25px;*/
+   padding: 5px 0 10px 0px;
 }
 
 .tdkb {
@@ -890,7 +896,7 @@ a.knowbase,span.knowbase {
 }
 */
 a.pubfaq {
-   margin-left:8px;
+   /*margin-left:8px;*/
    color: #c9993C;
 }
 
