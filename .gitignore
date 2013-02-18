@@ -1,5 +1,6 @@
 # Configure files, don't track them
 config/config_db.php
+config/define.php
 
 # IDE, don't track them
 aptana/
