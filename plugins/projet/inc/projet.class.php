@@ -476,14 +476,14 @@ class PluginProjetProjet extends CommonDBTM {
       echo "<tr class='tab_bg_1'><td colspan='4'>".$LANG['plugin_projet'][2].": </td></tr>";
 
       echo "<tr class='tab_bg_1'><td colspan='4'>";			
-      echo "<textarea cols='130' rows='4' name='comment' >".$this->fields["comment"]."</textarea>";
+      echo "<textarea cols='130' rows='4' name='comment' class='comment task' >".$this->fields["comment"]."</textarea>";
       echo "<input type='hidden' name='withtemplate' value='".$options['withtemplate']."'>";
       echo "</td></tr>";
       
       echo "<tr class='tab_bg_1'><td colspan='4'>".$LANG['plugin_projet'][14].": </td></tr>";
 
       echo "<tr class='tab_bg_1'><td colspan='4'>";			
-      echo "<textarea cols='130' rows='4' name='description' >".$this->fields["description"]."</textarea>";
+      echo "<textarea cols='130' rows='4' name='description'  class='comment task' >".$this->fields["description"]."</textarea>";
       echo "</td></tr>";
       
       echo "<tr class='tab_bg_1 center'><td colspan='4'>";
@@ -1111,7 +1111,7 @@ class PluginProjetProjet extends CommonDBTM {
    static function dropAccent($chaine) {
 
       $chaine=utf8_decode($chaine);
-      $chaine=strtr( $chaine, 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ', 'AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn' );
+      $chaine=strtr( $chaine, 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', 'AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn' );
       return $chaine;
 
    }

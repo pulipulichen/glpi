@@ -516,6 +516,10 @@ td { }
     resize:vertical;
 }
 
+.tab_bg_1 .comment.task {
+    height: 300px;
+}
+
 .tab_bg_1 td {
     vertical-align: top;
 }

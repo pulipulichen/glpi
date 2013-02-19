@@ -542,7 +542,7 @@ class PluginProjetTask extends CommonDBTM {
       echo "<table width='100%'>";
       echo "<tr>";
       echo "<td>";
-      echo "<textarea name='comment' cols='$cols' rows='$rows'>".$this->fields["comment"]."</textarea>";
+      echo "<textarea name='comment' class='comment task' cols='$cols' rows='$rows'>".$this->fields["comment"]."</textarea>";
       echo "</td></tr>";
       echo "</table>";
       if (!empty($ID)) {
@@ -551,7 +551,7 @@ class PluginProjetTask extends CommonDBTM {
          echo "<table width='100%'>";
          echo "<tr>";
          echo "<td>";
-         echo "<textarea name='sub' cols='$cols' rows='$rows'>".$this->fields["sub"]."</textarea>";
+         echo "<textarea name='sub'  class='comment task' cols='$cols' rows='$rows'>".$this->fields["sub"]."</textarea>";
          echo "</td>";
          echo "</tr>";
          echo "</table>";
