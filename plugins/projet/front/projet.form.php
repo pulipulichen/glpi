@@ -117,7 +117,7 @@ else
 {
 	$PluginProjetProjet->checkGlobal("r");
 
-	commonHeader($PluginProjetProjet->getName(), '',"plugins","projet");
+	commonHeader($LANG['plugin_projet']['title'][1], '',"plugins","projet");
 
 	$PluginProjetProjet->showForm($_GET["id"], array('withtemplate' => $_GET["withtemplate"]));
 }
