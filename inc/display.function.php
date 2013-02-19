@@ -3041,8 +3041,8 @@ function createAjaxTabs($tabdiv_id='tabspanel', $tabdivcontent_id='tabcontent', 
 
                echo "{
                   title: \"".$val['title']."\",
-                  id: '$key',
-                  autoLoad: {url: '".$val['url']."',
+                  id: '$key',";
+               echo "autoLoad: {url: '".$val['url']."',
                      scripts: true,
                      nocache: true";
                      if (isset($val['params'])) {
@@ -3062,11 +3062,21 @@ function createAjaxTabs($tabdiv_id='tabspanel', $tabdivcontent_id='tabcontent', 
                            //alert(objServerResponse.responseText);
                         }
                         });
-                     }
+                     },
+                        activate: function() {
+                            var _main_form = document.getElementById('main_form');";
+               if ($key == 1 || $key == -1) {
+                   echo "_main_form.style.display = 'block';";
+               }
+               else {
+                   echo "_main_form.style.display = 'none';";
+               }
+               echo     "}
                   }";
                echo "}";
             } // Foreach tabs
-         echo "]});";
+         echo "]            
+});";
 
          echo "/// Define view point";
          echo "tabpanel.expand();";
@@ -3123,7 +3133,7 @@ function showNotesForm($target, $itemtype, $id) {
                && (!$item->isEntityAssign() || haveAccessToEntity($item->getEntityID())));
 
    if ($canedit) {
-      echo "<form name='form' method='post' action='".$target."'>";
+      echo "<form id='main_form' name='form' method='post' action='".$target."'>";
    }
 
    echo "<div class='center'>";
