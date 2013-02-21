@@ -323,6 +323,9 @@ function getAllDatasFromTable($table, $condition="", $usecache=false) {
       $query .= " WHERE $condition ";
    }
 
+   if ($table == 'glpi_plugin_projet_taskstates')
+       $query .= " ORDER BY name ASC";
+   
    if ($result=$DB->query($query)) {
       while ($data=$DB->fetch_assoc($result)) {
          $datas[$data['id']] = $data;
