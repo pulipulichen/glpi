@@ -356,7 +356,7 @@ class PluginProjetTask extends CommonDBTM {
       if ($this->canCreate() && $canedit) {
       
          echo "<div align='center'>";
-         echo "<a href='".$CFG_GLPI["root_doc"]."/plugins/projet/front/task.form.php?plugin_projet_projets_id=".$plugin_projet_projets_id."' >".$LANG['plugin_projet'][11]."</a></div>";
+         echo "<a class=\"task-button\" href='".$CFG_GLPI["root_doc"]."/plugins/projet/front/task.form.php?plugin_projet_projets_id=".$plugin_projet_projets_id."' >".$LANG['plugin_projet'][11]."</a></div>";
          echo "</div>";
       }
    }
@@ -851,16 +851,46 @@ class PluginProjetTask extends CommonDBTM {
       }	
    }*/
    
-   function taskLegend() {
-      global $LANG;
+   function taskLegend($id = null) {
+      global $LANG, $DB;
       
       echo "<div align='center'><table><tr>";
 
       $states = getAllDatasFromTable("glpi_plugin_projet_taskstates");
+      
+      if ($id != null)
+      {
+          $id = 'id=' + $id + '&';
+      }
+      else {
+          $id = '';
+      }
+      
       if (!empty($states)) {
+          
+          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0'";
+          
+          $result = $DB->query($query);
+          $numrows =  $DB->numrows($result);
+          
+            echo "<td style='background-color:black;'>"
+                    ."<a href='javascript:reloadTab(\"status=-1\")'>".$LANG['buttons'][40]."(".$numrows.")</a></td>";
             foreach ($states as $state) {
-         echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">".$state["name"]."</td>";
-         }
+          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` = ".$state['id'];
+          
+          $result = $DB->query($query);
+          $numrows =  $DB->numrows($result);
+                
+                echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">"
+                    //."<a href='/plugins/projet/front/task.php?is_deleted=0&field%5B0%5D=".$state["id"]."6&searchtype%5B0%5D=equals&contains%5B0%5D=6&itemtype=PluginProjetTask&start=0'>"
+                    //."<a href='/projet/front/projet.form.php?".$id."status=".$state["id"]."'>"
+                    ."<a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
+                        .$state["name"]." (".$numrows.") </a></td>";
+             }
       }
       echo "</tr></table></div>";
 
@@ -1197,7 +1227,7 @@ class PluginProjetTask extends CommonDBTM {
       $p['field']       = array();//
       $p['contains']    = array();//
       $p['searchtype']  = array();//
-      $p['sort']        = '1'; //
+      $p['sort']        = null; //
       $p['order']       = 'ASC';//
       $p['start']       = 0;//
       $p['is_deleted']  = 0;
@@ -1208,6 +1238,7 @@ class PluginProjetTask extends CommonDBTM {
       $p['field2']      = '';//
       $p['itemtype2']   = '';
       $p['searchtype2']  = '';
+      $p['status'] = null;
       
       foreach ($params as $key => $val) {
             $p[$key]=$val;
@@ -1339,6 +1370,16 @@ class PluginProjetTask extends CommonDBTM {
       $query.= " WHERE `".$itemtable."`.`plugin_projet_projets_id` = '".$p['id']."'";
       $query.= " AND `".$itemtable."`.`is_deleted` = '".$p['is_deleted']."' ";
       
+      //echo $p['status'].'|||';
+      if (isset($p['status']) && $p['status'] != -1)
+      {
+          $query.= " AND `glpi_plugin_projet_taskstates`.`id` = ".$p["status"]." ";
+      }
+      else
+      {
+          $query.= " AND `glpi_plugin_projet_taskstates`.`id` <> 5 ";
+      }
+      
       //// 7 - Manage GROUP BY
       $GROUPBY = "";
       // Meta Search / Search All / Count tickets
@@ -1358,13 +1399,23 @@ class PluginProjetTask extends CommonDBTM {
       }
       $query.=$GROUPBY;
       //// 4 - ORDER
-      $ORDER=" ORDER BY `id` ";
-      foreach($toview as $key => $val) {
-         if ($p['sort']==$val) {
-            $ORDER= Search::addOrderBy($itemtype,$p['sort'],$p['order'],$key);
+      //$ORDER=" ORDER BY `id` ";
+      //echo $p['sort'].'-'.$p['status'];
+      if ($p['sort'] != null) {
+          foreach($toview as $key => $val) {
+            if ($p['sort']==$val) {
+               $ORDER= Search::addOrderBy($itemtype,$p['sort'],$p['order'],$key);
+            }
          }
       }
+      else
+      {
+          $ORDER=" ORDER BY `date_mod` DESC";
+      }
+        
+      //$ORDER=" ORDER BY `date_mod` DESC";
       $query.=$ORDER;
+      //echo $query;
 
       // Get it from database	
       
@@ -1413,8 +1464,11 @@ class PluginProjetTask extends CommonDBTM {
             $sel="";
             if (isset($_GET["select"])&&$_GET["select"]=="all") $sel="checked";
 
-            if ($this->canCreate() && $canedit && $output_type==HTML_OUTPUT && $p['withtemplate']!=2)
+            if ($this->canCreate() && $canedit && $output_type==HTML_OUTPUT && $p['withtemplate']!=2) {
                echo "<form method='post' name='massiveaction_form' id='massiveaction_form' action=\"../ajax/massiveactionTask.php\">";
+            }
+            
+            $this->taskLegend($p['id']);
 
             // Add toview elements
             $nbcols=$toview_count;
@@ -1457,11 +1511,15 @@ class PluginProjetTask extends CommonDBTM {
            
             // Display column Headers for toview items
             foreach ($toview as $key => $val) {
+                if ($val == 9)
+                    continue;
+                
                $linkto='';
                if (!isset($searchopt[$itemtype][$val]['nosort'])
                      || !$searchopt[$itemtype][$val]['nosort']) {
                   $linkto = "javascript:reloadTab('sort=".$val."&amp;order=".($p['order']=="ASC"?"DESC":"ASC").
-                           "&amp;start=".$p['start'].$globallinkto."')";
+                           "&amp;start=".$p['start'].$globallinkto.
+                           "&amp;status=5')";
                }
                echo Search::showHeaderItem($output_type,$searchopt[$itemtype][$val]["name"],
                                           $header_num,$linkto,$p['sort']==$val,$p['order']);
@@ -1502,8 +1560,22 @@ class PluginProjetTask extends CommonDBTM {
                   echo Search::showItem($output_type,$tmpcheck,$item_num,$row_num,"width='10'");
                }
                
+               //$description_length_max = 30;
                foreach ($toview as $key => $val) {
-                  echo Search::showItem($output_type,Search::giveItem($itemtype,$val,$data,$key),$item_num,
+                  if ($val == 9)
+                    continue;
+                  $item = Search::giveItem($itemtype,$val,$data,$key);
+                  /*
+                  if ($itemtype == 'PluginProjetTask' && $key == 3)
+                  {
+                      if (utf8_strlen($item) > $description_length_max) {
+                          $item = utf8_substr($item, 0, $description_length_max) + '...';
+                      }
+                  }
+                   * 
+                   */
+                  
+                  echo Search::showItem($output_type,$item,$item_num,
                                        $row_num,
                            Search::displayConfigItem($itemtype,$val,$data,$key));
                }

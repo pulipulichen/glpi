@@ -4849,7 +4849,7 @@ class Search {
 
          default :
             //TODO supprimer valign pour mettre class mais conflit avec $extraparam
-            $out = "<td $extraparam valign='top'>";
+            $out = "<td $extraparam valign='top'><div>";
 
 /*            if (!preg_match('/<hr>/',$value)) {
                $values = preg_split("/<br>/i",$value);
@@ -4872,7 +4872,7 @@ class Search {
             } else {*/
             $out .= $value;
 //             }
-            $out .= "</td>\n";
+            $out .= "</div></td>\n";
       }
       $num++;
       return $out;
