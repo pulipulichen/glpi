@@ -854,7 +854,7 @@ class PluginProjetTask extends CommonDBTM {
    function taskLegend($id = null) {
       global $LANG, $DB;
       
-      echo "<div align='center'><table><tr>";
+      echo "<div align='center' class='task-legend'><table><tr>";
 
       $states = getAllDatasFromTable("glpi_plugin_projet_taskstates");
       
@@ -870,13 +870,25 @@ class PluginProjetTask extends CommonDBTM {
           
           $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
 FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` <> 5";
+          
+          $result = $DB->query($query);
+          $numrows =  $DB->numrows($result);
+                   
+            echo "<td style='background-color:black;'>"
+                    ."<a href='javascript:reloadTab(\"status=-1\")'> ".$LANG['bookmark'][6]."(".$numrows.") </a></td>";
+          
+          
+          
+          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
 WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0'";
           
           $result = $DB->query($query);
           $numrows =  $DB->numrows($result);
-          
+                   
             echo "<td style='background-color:black;'>"
-                    ."<a href='javascript:reloadTab(\"status=-1\")'>".$LANG['buttons'][40]."(".$numrows.")</a></td>";
+                    ."<a href='javascript:reloadTab(\"status=-2\")'> ".$LANG['buttons'][40]."(".$numrows.") </a></td>";
             foreach ($states as $state) {
           $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
 FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
@@ -888,8 +900,8 @@ WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glp
                 echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">"
                     //."<a href='/plugins/projet/front/task.php?is_deleted=0&field%5B0%5D=".$state["id"]."6&searchtype%5B0%5D=equals&contains%5B0%5D=6&itemtype=PluginProjetTask&start=0'>"
                     //."<a href='/projet/front/projet.form.php?".$id."status=".$state["id"]."'>"
-                    ."<a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
-                        .$state["name"]." (".$numrows.") </a></td>";
+                    ." <a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
+                        .$state["name"]." (".$numrows.") </a> </td>";
              }
       }
       echo "</tr></table></div>";
@@ -1238,7 +1250,7 @@ WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glp
       $p['field2']      = '';//
       $p['itemtype2']   = '';
       $p['searchtype2']  = '';
-      $p['status'] = null;
+      $p['status'] = -1;
       
       foreach ($params as $key => $val) {
             $p[$key]=$val;
@@ -1371,12 +1383,11 @@ WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glp
       $query.= " AND `".$itemtable."`.`is_deleted` = '".$p['is_deleted']."' ";
       
       //echo $p['status'].'|||';
-      if (isset($p['status']) && $p['status'] != -1)
+      if (isset($p['status']) && $p['status'] > -1)
       {
           $query.= " AND `glpi_plugin_projet_taskstates`.`id` = ".$p["status"]." ";
       }
-      else
-      {
+      else if ($p['status'] == -1) {
           $query.= " AND `glpi_plugin_projet_taskstates`.`id` <> 5 ";
       }
       
@@ -1444,7 +1455,7 @@ WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glp
                return false;
             }
          }
-           
+         $this->taskLegend($p['id']);  
          if ($p['start']<$numrows) {
             
             if ($output_type==HTML_OUTPUT && !$p['withtemplate']) {
@@ -1468,7 +1479,7 @@ WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glp
                echo "<form method='post' name='massiveaction_form' id='massiveaction_form' action=\"../ajax/massiveactionTask.php\">";
             }
             
-            $this->taskLegend($p['id']);
+            
 
             // Add toview elements
             $nbcols=$toview_count;
