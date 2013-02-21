@@ -289,6 +289,11 @@ class KnowbaseItem extends CommonDBTM {
          echo "<span class='big_space'>";
          echo "<input type='reset' class='submit' value=\"".$LANG['buttons'][16]."\"></span>";
          echo "</p></form></div>";
+         
+         if (!empty($ID)) {
+            Document::showAssociated($this);
+         }
+         
          return true;
       }
       //  ELSE Cannot edit
