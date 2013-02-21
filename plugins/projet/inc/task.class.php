@@ -593,10 +593,12 @@ class PluginProjetTask extends CommonDBTM {
       $date = convDateTime($this->fields["date_mod"]);
       echo $datestring.$date."</td>";
       echo "</tr>";
+      
 
 		$this->showFormButtons($options);
       $this->addDivForTabs();
       
+        Document::showAssociated($this);
       return true;	
 	}
 	

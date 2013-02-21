@@ -1232,7 +1232,14 @@ function commonHeader($title, $url='', $sector="none", $item="none", $option="")
     * 20130221 Pulipuli Chen
     * 強調知識庫的連結
     */
-   echo "<li class='menu'><a href='/front/knowbaseitem.php' class='itemP'>".$LANG['Menu'][19]."</a></li>";
+   echo "<li class='menu shortcut'><a href='".$CFG_GLPI['root_doc'] . "/front/knowbaseitem.php' class='itemP'>".$LANG['Menu'][19]."</a></li>";
+   
+   /**
+    * 20130222 Pulipuli Chen
+    * 強調個人資料的連結
+    */
+   echo "<li class='menu user shortcut'><a href='".$CFG_GLPI['root_doc'] . "/front/user.form.php?id=".getLoginUserID()."' class='itemP user'>".$LANG['common'][34].": ".  formatUserName (0, $_SESSION["glpiname"], $_SESSION["glpirealname"],
+                           $_SESSION["glpifirstname"], 0, 20) ."</a></li>";
    
    // Get object-variables and build the navigation-elements
    $i = 1;

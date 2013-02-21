@@ -1375,6 +1375,15 @@ ul#menu li.menu {
    /*font-size: 1em;
    padding: 1px 0.3em;*/
 }
+
+ul#menu li.menu.user {
+   width: 150px;
+}
+
+ul#menu li.menu.shortcut a.itemP {
+   color:green !important;
+}
+
 /*
 ul#menu li#menu1 {
    float: left;

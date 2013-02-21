@@ -329,7 +329,7 @@ class Document extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".$LANG['document'][2]." (".self::getMaxUploadSize().")&nbsp;:</td>";
-      echo "<td><input type='file' name='filename' value='".$this->fields["filename"]."' size='39'>";
+      echo "<td>121212<input type='file' name='filename' value='".$this->fields["filename"]."' size='39'>";
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
