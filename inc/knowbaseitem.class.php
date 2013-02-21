@@ -203,7 +203,7 @@ class KnowbaseItem extends CommonDBTM {
               * 不要全部都丟在頂層類別！
               */
              $KbCategory = new KnowbaseItemCategory();
-             if ($KbCategory->getFromDB(KNOWBASE_MISC_CATEGORY)) {
+             if ($KbCategory->getFromDB(KNOWBASE_MISC_CATEGORY) && empty($ID)) {
                 Dropdown::show('KnowbaseItemCategory',
                             array('value' => KNOWBASE_MISC_CATEGORY));
              }
