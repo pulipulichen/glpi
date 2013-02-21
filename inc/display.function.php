@@ -1228,11 +1228,17 @@ function commonHeader($title, $url='', $sector="none", $item="none", $option="")
    echo "<div id='c_menu'>";
    echo "<ul id='menu'>";
 
+   /**
+    * 20130221 Pulipuli Chen
+    * 強調知識庫的連結
+    */
+   echo "<li class='menu'><a href='/front/knowbaseitem.php' class='itemP'>".$LANG['Menu'][19]."</a></li>";
+   
    // Get object-variables and build the navigation-elements
    $i = 1;
    foreach ($menu as $part => $data) {
       if (isset($data['content']) && count($data['content'])) {
-         echo "<li id='menu$i' onmouseover=\"javascript:menuAff('menu$i','menu');\" >";
+         echo "<li class='menu' id='menu$i' onmouseover=\"javascript:menuAff('menu$i','menu');\" >";
          $link = "#";
 
          if (isset($data['default'])&&!empty($data['default'])) {
@@ -1261,6 +1267,8 @@ function commonHeader($title, $url='', $sector="none", $item="none", $option="")
       }
    }
 
+  
+   
    echo "</ul>";
    echo "<div class='sep'></div>";
    echo "</div>";

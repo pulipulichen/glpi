@@ -940,11 +940,11 @@ class KnowbaseItem extends CommonDBTM {
    **/
    static function showViewTopCategory($options, $target, $faq=0) {
 
-      echo "<div><table class='center-h' width='950px'><tr><td class='center top' width='65%'>";
+      echo "<div><table class='center-h' width='950px'><tr><td class='center top' width='65%'><div class='top-category'>";
       self::showList($options,$faq);
-      echo "</td><td class='center top' width='35%'>";
+      echo "</div></td><td class='center top' width='35%'><div class='top-category'>";
       self::showRecentPopular($target, "recent", $faq);
-      echo "</td></tr>";
+      echo "</div></td></tr>";
       echo "</table></div>";
 }
 

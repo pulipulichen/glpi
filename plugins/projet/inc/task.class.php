@@ -868,41 +868,56 @@ class PluginProjetTask extends CommonDBTM {
       
       if (!empty($states)) {
           
-          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
-FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
-WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` <> 5";
+          if ($id != null) {
           
-          $result = $DB->query($query);
-          $numrows =  $DB->numrows($result);
-                   
-            echo "<td style='background-color:black;'>"
-                    ."<a href='javascript:reloadTab(\"status=-1\")'> ".$LANG['bookmark'][6]."(".$numrows.") </a></td>";
-          
-          
-          
-          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
-FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
-WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0'";
-          
-          $result = $DB->query($query);
-          $numrows =  $DB->numrows($result);
-                   
-            echo "<td style='background-color:black;'>"
-                    ."<a href='javascript:reloadTab(\"status=-2\")'> ".$LANG['buttons'][40]."(".$numrows.") </a></td>";
-            foreach ($states as $state) {
-          $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
-FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
-WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` = ".$state['id'];
-          
-          $result = $DB->query($query);
-          $numrows =  $DB->numrows($result);
-                
-                echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">"
-                    //."<a href='/plugins/projet/front/task.php?is_deleted=0&field%5B0%5D=".$state["id"]."6&searchtype%5B0%5D=equals&contains%5B0%5D=6&itemtype=PluginProjetTask&start=0'>"
-                    //."<a href='/projet/front/projet.form.php?".$id."status=".$state["id"]."'>"
-                    ." <a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
-                        .$state["name"]." (".$numrows.") </a> </td>";
-             }
+            $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+  FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+  WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` <> 5";
+
+            $result = $DB->query($query);
+            $numrows =  $DB->numrows($result);
+
+              echo "<td style='background-color:black;'>"
+                      ."<a href='javascript:reloadTab(\"status=-1\")'> ".$LANG['bookmark'][6]."(".$numrows.") </a></td>";
+
+
+
+            $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+  FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+  WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0'";
+
+            $result = $DB->query($query);
+            $numrows =  $DB->numrows($result);
+
+              echo "<td style='background-color:black;'>"
+                      ."<a href='javascript:reloadTab(\"status=-2\")'> ".$LANG['buttons'][40]."(".$numrows.") </a></td>";
+              foreach ($states as $state) {
+            $query = "SELECT `glpi_plugin_projet_tasks`.`entities_id`
+  FROM `glpi_plugin_projet_tasks` LEFT JOIN `glpi_plugin_projet_taskplannings` ON (`glpi_plugin_projet_taskplannings`.`plugin_projet_tasks_id` = `glpi_plugin_projet_tasks`.`id`) LEFT JOIN `glpi_plugin_projet_taskstates` ON (`glpi_plugin_projet_tasks`.`plugin_projet_taskstates_id` = `glpi_plugin_projet_taskstates`.`id` ) 
+  WHERE `glpi_plugin_projet_tasks`.`plugin_projet_projets_id` = '".$id."' AND `glpi_plugin_projet_tasks`.`is_deleted` = '0' AND `glpi_plugin_projet_taskstates`.`id` = ".$state['id'];
+
+            $result = $DB->query($query);
+            $numrows =  $DB->numrows($result);
+
+                  echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">"
+                      //."<a href='/plugins/projet/front/task.php?is_deleted=0&field%5B0%5D=".$state["id"]."6&searchtype%5B0%5D=equals&contains%5B0%5D=6&itemtype=PluginProjetTask&start=0'>"
+                      //."<a href='/projet/front/projet.form.php?".$id."status=".$state["id"]."'>"
+                      ." <a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
+                          .$state["name"]."(".$numrows.") </a> </td>";
+               }    
+          }
+          else
+          {
+              echo "<td style='background-color:black;'>"
+                      ."<a href='javascript:reloadTab(\"status=-1\")'> ".$LANG['bookmark'][6]."</a></td>";
+              echo "<td style='background-color:black;'>"
+                      ."<a href='javascript:reloadTab(\"status=-2\")'> ".$LANG['buttons'][40]."</a></td>";
+              foreach ($states as $state) {
+                  echo "<td bgcolor=\"".PluginProjetTaskState::getStatusColor($state["id"])."\">"
+                      ." <a href='javascript:reloadTab(\"status=".$state["id"]."\")'>"
+                          .$state["name"]." </a> </td>";
+               }    
+          }
       }
       echo "</tr></table></div>";
 
