@@ -403,17 +403,9 @@ class PluginProjetTask extends CommonDBTM {
       echo $link;
       echo "</td>";
       echo "<td>";
-      echo $LANG['plugin_projet'][58].": </td><td>";
+      echo $LANG['plugin_projet'][58].": </td><td colspan='3'>";
       $this->dropdownParent("plugin_projet_tasks_id", $this->fields["plugin_projet_tasks_id"],array('id' => $this->fields["id"],
                                  'plugin_projet_projets_id' => $projet));
-      echo "</td>";
-      echo "<td>";
-      echo $LANG['plugin_projet'][55].": </td><td>";
-      Dropdown::showYesNo("depends",$this->fields["depends"]);
-      echo "&nbsp;";
-      echo " <img alt='' src='".$CFG_GLPI["root_doc"]."/pics/aide.png' onmouseout=\"cleanhide('commentsup')\" onmouseover=\"cleandisplay('commentsup')\">";
-      echo "<span class='over_link' id='commentsup'>".nl2br($LANG['plugin_projet'][56])."</span>";
-      
       echo "</td>";
       
       echo "</tr>";
@@ -448,8 +440,8 @@ class PluginProjetTask extends CommonDBTM {
       
       echo "<tr class='tab_bg_1'>";
       
-      echo "<td colspan='2'>";
-      echo $LANG['common'][15].": </td><td  colspan='2'>";
+      echo "<td colspan='2' rowspan='2'>";
+      echo $LANG['common'][15].": </td><td  colspan='2' rowspan='2'>";
       Dropdown::show('Location',
                   array('value'  => $this->fields["locations_id"]));
       echo "</td>";
@@ -479,6 +471,18 @@ class PluginProjetTask extends CommonDBTM {
       echo "</td>";			
       echo "</tr>";
       
+      echo "<tr>";
+      
+      echo "<td>";
+      echo $LANG['plugin_projet'][55].": </td><td colspan='3'>";
+      Dropdown::showYesNo("depends",$this->fields["depends"]);
+      echo "&nbsp;";
+      echo " <img alt='' src='".$CFG_GLPI["root_doc"]."/pics/aide.png' onmouseout=\"cleanhide('commentsup')\" onmouseover=\"cleandisplay('commentsup')\">";
+      echo "<span class='over_link' id='commentsup'>".nl2br($LANG['plugin_projet'][56])."</span>";
+      
+      echo "</td>";
+      
+      echo "</tr>";
       
       echo "<tr class='tab_bg_3'>";
       echo "<td colspan='4'>".$LANG['job'][5].": </td>";
@@ -639,12 +643,23 @@ class PluginProjetTask extends CommonDBTM {
          $restrict.= ") ";
       }
       $restrict.=getEntitiesRestrictRequest(" AND ",$this->getTable(),'','',$this->maybeRecursive()); 
-      $restrict.= "ORDER BY `name` ASC ";
+      //$restrict.= "ORDER BY `name` ASC ";
+      $restrict.= "ORDER BY `date_mod` DESC ";
+      
       $tasks = getAllDatasFromTable($this->getTable(),$restrict);
       
+      $name_length_max = 15;
+      $name_footer_length = 5;
       if (!empty($tasks)) {
          foreach ($tasks as $task) {
-            echo "<option value='".$task["id"]."' ".($value==$task["id"]?" selected ":"").">".$task["name"];
+            $name = $task["name"];
+            $footer = '';
+            if (utf8_strlen($name) > ($name_length_max + $name_footer_length)) {
+                $footer = utf8_substr($name, (0-$name_footer_length));
+                $name = utf8_substr($name, 0, $name_length_max) . '...' . $footer;
+            }
+            
+            echo "<option value='".$task["id"]."' ".($value==$task["id"]?" selected ":"").">".$name;
             if (empty($task["name"]) || $_SESSION["glpiis_ids_visible"] == 1 ) { 
                echo " (";
                echo $task["id"].")";
@@ -755,8 +770,10 @@ class PluginProjetTask extends CommonDBTM {
       echo "<select id='$id' name='$name'>";
       echo "<option value='0'>".DROPDOWN_EMPTY_VALUE."</option>";
       
-      $condition= " 1 = 1 ORDER BY `name` ASC";
+      $condition = " 1 = 1 ORDER BY `name` ASC";
+      
       $option = getAllDatasFromTable("glpi_plugin_projet_taskstates",$condition);
+      
          
       if ($options["id"]!=0 && $options["depends"]!=0) {
          $restrict = "`id` != '".$options["id"]."' AND `plugin_projet_projets_id` = '".$options["plugin_projet_projets_id"]."'";
@@ -777,6 +794,7 @@ class PluginProjetTask extends CommonDBTM {
          $restrict.= $this->findChilds($DB,$options["plugin_projet_projets_id"],$options["id"]);
          $restrict.= ") ";
          $restrict.= "ORDER BY `name` ASC ";
+         
          $tasks = getAllDatasFromTable($this->getTable(),$restrict);
          
          if (!empty($tasks) && !empty($tab)) {
@@ -858,7 +876,10 @@ class PluginProjetTask extends CommonDBTM {
       
       echo "<div align='center' class='task-legend'><table><tr>";
 
-      $states = getAllDatasFromTable("glpi_plugin_projet_taskstates");
+            
+      $condition = " 1 = 1 ORDER BY `name` ASC";
+      
+      $states = getAllDatasFromTable("glpi_plugin_projet_taskstates",$condition);
       
       if ($id != null)
       {
