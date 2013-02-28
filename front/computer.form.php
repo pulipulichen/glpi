@@ -206,7 +206,14 @@ if (isset($_POST["add"])) {
    glpi_header($_SERVER['HTTP_REFERER']);
 
 } else {//print computer informations
-   commonHeader($LANG['Menu'][0], $_SERVER['PHP_SELF'], "inventory", "computer");
+   $computer->check($_GET["id"],'r');
+   $title = '';
+   if (isset($computer->fields['name']))
+       $title = ': '.$computer->fields['name'];
+   $title = $LANG['Menu'][0] . $title;
+   
+   commonHeader($title, $_SERVER['PHP_SELF'], "inventory", "computer");
+   
    //show computer form to add
    $computer->showForm($_GET["id"], array('withtemplate' => $_GET["withtemplate"]));
    commonFooter();
